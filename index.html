@@ -6,6 +6,7 @@
   <title>TreeSizer — Find your biggest folders</title>
   <style id="treesizer-styles">
 :root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#21322c;background:#f6f8f5;font-synthesis:none}*{box-sizing:border-box}body{margin:0}main{max-width:1100px;padding:32px 40px;margin:auto}header,.brand,.toolbar,footer{display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{justify-content:flex-start;font-weight:750;font-size:22px}.logo{display:grid;place-items:center;background:#dceadf;width:36px;height:36px;border-radius:10px;color:#267349}.badge{font-size:10px;letter-spacing:1.5px;color:#65766b;background:#e9eee7;padding:6px 8px;border-radius:5px}.privacy{font-size:12px;color:#4e7960}.intro{padding:68px 0 36px}.eyebrow{font-size:11px;font-weight:700;letter-spacing:1.7px;color:#64806c;margin:0 0 14px}h1{font-size:clamp(36px,5.5vw,62px);letter-spacing:-2.5px;line-height:1.06;margin:0 0 22px;font-weight:650}.intro>p:not(.eyebrow){color:#627268;font-size:16px;max-width:460px;line-height:1.6}.intro .small{font-size:12px!important}button{font:inherit;cursor:pointer}button:focus-visible,input:focus-visible{outline:3px solid #8ab19a;outline-offset:4px}.primary{border:0;border-radius:9px;background:#2b684a;color:white;padding:15px 22px;margin:12px 0 0;font-weight:600;display:inline-flex;gap:38px}.primary:hover{background:#205639}.primary:disabled{opacity:.65;cursor:wait}#status{font-size:13px;color:#627268;min-height:20px}.summary{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #dce3db;background:#fff;border-radius:12px;margin:24px 0 30px;padding:26px 0}.summary>div{padding:0 26px;border-right:1px solid #e6ebe4}.summary>div:last-child{border:0}.summary .eyebrow{font-size:10px}.summary strong{font-size:28px;letter-spacing:-1px;font-weight:650}.toolbar{margin-bottom:16px;font-size:13px}.toolbar label{white-space:nowrap;color:#65766b;display:flex;gap:6px;align-items:center}input{accent-color:#2b684a}#breadcrumbs{display:flex;flex-wrap:wrap;align-items:center;gap:8px}#breadcrumbs button{background:none;border:0;color:#37704f;padding:4px;font-size:13px}#breadcrumbs button:disabled{color:#21322c;font-weight:650;cursor:default}.table-wrap{overflow:auto;background:white;border:1px solid #dce3db;border-radius:12px}table{width:100%;border-collapse:collapse;text-align:left;font-size:13px;white-space:nowrap}th{font-size:11px;font-weight:650;letter-spacing:.5px;background:#edf2eb;color:#607266;padding:16px 20px}th button{border:0;background:none;padding:0;color:inherit;font-weight:inherit}td{padding:18px 20px;border-top:1px solid #eaf0e8}th:first-child{width:42%}td:first-child{white-space:normal;overflow-wrap:anywhere;min-width:160px}td:last-child{color:#748278;font-size:12px}.entry{border:0;background:none;color:#263d2e;padding:0;text-align:left;display:flex;align-items:center;gap:12px;font-size:13px;overflow-wrap:anywhere}.entry:hover{text-decoration:underline}.icon{color:#769d70;font-size:20px;flex-shrink:0}.file-name{display:flex;gap:12px;align-items:center}.size-cell{font-variant-numeric:tabular-nums;font-weight:650}.bar{display:inline-block;width:65px;height:5px;background:#edf2eb;border-radius:4px;vertical-align:middle;margin-right:10px;overflow:hidden}.bar i{display:block;background:#82ab74;height:100%;border-radius:4px}.percentage{font-variant-numeric:tabular-nums;color:#73816f;font-size:11px}.note,#empty{font-size:12px;color:#748278;line-height:1.6;margin-top:18px}footer{border-top:1px solid #dce3db;padding-top:22px;margin-top:60px;color:#7b887c;font-size:11px}[hidden]{display:none!important}@media(max-width:650px){main{padding:24px 18px}.privacy,.badge{display:none}.intro{padding-top:46px}.summary>div{padding:0 12px}.summary strong{font-size:21px}.summary .eyebrow{letter-spacing:1px;font-size:9px}.share{display:none}td:nth-child(3){display:none}th,td{padding:14px 12px}.toolbar{align-items:flex-start}footer{align-items:flex-start;flex-direction:column;gap:8px}}
+.cloud-panel{background:#eef3ed;border:1px solid #dce3db;border-radius:12px;padding:22px 26px;margin:0 0 24px}.cloud-panel h2{font-size:18px;margin:0 0 8px}.cloud-panel p,.cloud-panel li{font-size:13px;color:#627268;line-height:1.6}.cloud-panel label{display:block;font-size:12px;font-weight:600;margin:16px 0 8px}.cloud-actions{display:flex;flex-wrap:wrap;gap:10px}.cloud-actions input{font:inherit;font-size:13px;padding:12px;border:1px solid #cad7c9;border-radius:7px;min-width:250px;flex:1}.secondary{border:1px solid #b8cab8;border-radius:7px;padding:12px 16px;background:white;color:#2b684a;font-size:13px;font-weight:600}.secondary:disabled{opacity:.6;cursor:wait}.cloud-panel details{margin-top:16px;font-size:12px}.cloud-panel summary{cursor:pointer;color:#37704f}.cloud-panel code{overflow-wrap:anywhere}.cloud-panel ol{padding-left:20px}.cloud-panel li{margin:8px 0}@media(max-width:650px){.cloud-panel{padding:18px}.cloud-actions input{min-width:0;width:100%;flex-basis:100%}}
 
 </style>
 </head>
@@ -13,6 +14,13 @@
   <main>
     <header><div class="brand"><span class="logo" aria-hidden="true">▤</span> TreeSizer <span class="badge">LOCAL TOOL</span></div><span class="privacy">● Private by design</span></header>
     <section class="intro"><p class="eyebrow">MAKE ROOM FOR WHAT MATTERS</p><h1>Find where your<br>space goes.</h1><p>Explore your folders, spot the heavy ones, and get a clear picture of your storage.</p><button id="choose" class="primary">Choose a folder <span aria-hidden="true">↗</span></button><input id="picker" type="file" webkitdirectory multiple hidden><p class="small">Files stay on your device. Nothing is uploaded.</p></section>
+    <section class="cloud-panel" aria-labelledby="cloud-title">
+      <h2 id="cloud-title">Or explore your OneDrive</h2>
+      <p>Sign in to count cloud-only files without downloading them. Read-only access to your own drive; shared shortcuts are excluded.</p>
+      <label for="clientId">Microsoft application (client) ID</label>
+      <div class="cloud-actions"><input id="clientId" type="text" placeholder="Paste your application ID" autocomplete="off" spellcheck="false"><button id="connect" class="secondary">Sign in &amp; scan OneDrive</button><button id="disconnect" class="secondary" hidden>Disconnect</button><button id="cancelScan" class="secondary" hidden>Cancel scan</button></div>
+      <details><summary>One-time OneDrive setup</summary><ol><li>Serve this file locally: in its folder, run <code>python -m http.server 8000 --bind 127.0.0.1</code>, then open <code>http://localhost:8000/index.html</code>.</li><li>In Microsoft Entra, open App registrations and register an application. Select accounts in any organizational directory and personal Microsoft accounts.</li><li>Add a <strong>Single-page application (SPA)</strong> redirect URI matching that exact page address. Add Microsoft Graph delegated permission <strong>Files.Read</strong>.</li><li>Copy the Application (client) ID above, then sign in. No client secret is needed. Work accounts may require administrator approval.</li></ol><p>The app ID is public. Sign-in tokens stay in memory until you disconnect or close the page. Local folder scanning still works by opening the HTML directly.</p></details>
+    </section>
     <p id="status" role="status" aria-live="polite">Select a folder to get started.</p>
     <section id="results" hidden>
       <div class="summary"><div><p class="eyebrow">TOTAL FILE SIZE</p><strong id="total"></strong></div><div><p class="eyebrow">FILES SCANNED</p><strong id="count"></strong></div><div><p class="eyebrow">FOLDERS</p><strong id="folders"></strong></div></div>
@@ -21,7 +29,7 @@
       <p id="empty" hidden>No subfolders here. Uncheck “Folders only” to see individual files.</p>
       <p class="note">Folder sizes include all nested files. “Last modified” is the newest file date inside a folder. Sizes are logical file bytes, not disk usage; hidden or inaccessible files may be omitted by your browser.</p>
     </section>
-    <footer>Less clutter. More clarity.<span>Read-only scanning · No account needed</span></footer>
+    <footer>Less clutter. More clarity.<span>Read-only scanning · Local + OneDrive</span></footer>
   </main>
   <script id="treesizer-app">
 (function (root) {
@@ -62,10 +70,139 @@
   else root.TreeSizer = api;
 })(globalThis);
 
+(function (root) {
+  'use strict';
+  const graphOrigin = 'https://graph.microsoft.com';
+  function graphURL(path) {
+    const url = new URL(path, `${graphOrigin}/v1.0/`);
+    if (url.origin !== graphOrigin || !url.pathname.startsWith('/v1.0/')) throw new Error('Invalid Microsoft Graph page URL.');
+    return url.href;
+  }
+  async function scanDrive(request, onProgress = () => {}, signal) {
+    const { folder } = root.TreeSizer || require('./core');
+    const drive = await request(graphURL('me/drive'), signal);
+    const tree = folder(drive.name || 'OneDrive');
+    const queue = [{ node: tree, path: 'me/drive/root/children' }];
+    let scanned = 0, skipped = 0;
+    for (let index = 0; index < queue.length; index++) {
+      const { node, path } = queue[index];
+      let url = graphURL(`${path}?$select=id,name,size,lastModifiedDateTime,file,folder,remoteItem,package&$top=200`);
+      while (url) {
+        if (signal?.aborted) throw new DOMException('Scan cancelled.', 'AbortError');
+        const page = await request(url, signal);
+        if (!Array.isArray(page.value)) throw new Error('Microsoft returned an invalid folder listing.');
+        for (const item of page.value) {
+          // Shared shortcuts can reference other drives or form cycles.
+          if (item.remoteItem) { skipped++; continue; }
+          const modified = Date.parse(item.lastModifiedDateTime) || 0;
+          if (item.folder) {
+            const child = folder(item.name, node);
+            node.children.set(item.name, child);
+            queue.push({ node: child, path: `me/drive/items/${encodeURIComponent(item.id)}/children` });
+          } else if (item.file || item.package) {
+            node.children.set(item.name, { name: item.name, parent: node, kind: 'file', size: item.size || 0, modified, count: 1 });
+            scanned++;
+          } else { skipped++; }
+        }
+        onProgress(scanned, index + 1, queue.length);
+        url = page['@odata.nextLink'] ? graphURL(page['@odata.nextLink']) : null;
+      }
+    }
+    // Aggregate from leaves up, including zero-byte files and empty folders.
+    for (let index = queue.length - 1; index >= 0; index--) {
+      const node = queue[index].node;
+      for (const child of node.children.values()) {
+        node.size += child.size;
+        node.count += child.count;
+        node.modified = Math.max(node.modified, child.modified);
+      }
+    }
+    return { tree, skipped };
+  }
+  const base64url = bytes => btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  async function signIn(clientId) {
+    if (!/^https?:$/.test(location.protocol) || !window.isSecureContext) {
+      throw new Error('OneDrive sign-in requires a local web server or HTTPS. See the OneDrive setup instructions.');
+    }
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(clientId)) throw new Error('Enter the Application (client) ID from your Microsoft app registration.');
+    // Open immediately within the user's click to avoid popup blockers.
+    const popup = window.open('about:blank', 'treesizer-microsoft', 'width=540,height=720');
+    if (!popup) throw new Error('Allow popups for this page, then try again.');
+    try {
+      const verifier = base64url(crypto.getRandomValues(new Uint8Array(32)));
+      const state = base64url(crypto.getRandomValues(new Uint8Array(32)));
+      const challenge = base64url(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier))));
+      const redirect = `${location.origin}${location.pathname}`;
+      const endpoint = 'https://login.microsoftonline.com/common/oauth2/v2.0';
+      const params = new URLSearchParams({ client_id: clientId, response_type: 'code', redirect_uri: redirect, response_mode: 'query', scope: 'https://graph.microsoft.com/Files.Read', state, code_challenge: challenge, code_challenge_method: 'S256', prompt: 'select_account' });
+      const code = await new Promise((resolve, reject) => {
+        let poll, timeout;
+        const cleanup = () => { window.removeEventListener('message', listener); clearInterval(poll); clearTimeout(timeout); };
+        const listener = event => {
+          if (event.origin !== location.origin || event.source !== popup || event.data?.type !== 'treesizer-oauth') return;
+          if (event.data.state !== state) { cleanup(); reject(new Error('Sign-in state did not match. Try signing in again.')); return; }
+          cleanup();
+          if (event.data.error) reject(new Error('Microsoft sign-in was declined or failed. Check the app registration and try again.'));
+          else if (event.data.code) resolve(event.data.code);
+          else reject(new Error('Microsoft did not return an authorization code.'));
+        };
+        window.addEventListener('message', listener);
+        poll = setInterval(() => { if (popup.closed) { cleanup(); reject(new Error('Sign-in window closed.')); } }, 500);
+        timeout = setTimeout(() => { cleanup(); reject(new Error('Sign-in timed out. Please try again.')); }, 300000);
+        popup.location.href = `${endpoint}/authorize?${params}`;
+      });
+      const response = await fetch(`${endpoint}/token`, { method: 'POST', body: new URLSearchParams({ client_id: clientId, grant_type: 'authorization_code', code, redirect_uri: redirect, code_verifier: verifier, scope: 'https://graph.microsoft.com/Files.Read' }) });
+      const result = await response.json();
+      if (!response.ok || !result.access_token) throw new Error('Sign-in could not finish. Check that the exact page address is registered as a Single-page application redirect URI.');
+      return result.access_token;
+    } finally { popup.close(); }
+  }
+  function graphRequest(token) {
+    return async (path, signal) => {
+      const url = graphURL(path);
+      for (let attempt = 0; attempt < 4; attempt++) {
+        const response = await fetch(url, { headers: { Authorization: `Bearer ${token}` }, signal });
+        if ((response.status === 429 || response.status === 503) && attempt < 3) {
+          const seconds = Math.min(60, Math.max(1, Number(response.headers.get('Retry-After')) || 2 ** (attempt + 1)));
+          await new Promise((resolve, reject) => {
+            if (signal?.aborted) { reject(new DOMException('Scan cancelled.', 'AbortError')); return; }
+            const abort = () => { clearTimeout(timer); reject(new DOMException('Scan cancelled.', 'AbortError')); };
+            const timer = setTimeout(() => { signal?.removeEventListener('abort', abort); resolve(); }, seconds * 1000);
+            signal?.addEventListener('abort', abort, { once: true });
+          });
+          continue;
+        }
+        if (response.status === 401) throw new Error('Microsoft sign-in expired. Disconnect and sign in again to rescan.');
+        if (response.status === 403) throw new Error('Microsoft denied access to a folder. Your organization may require administrator approval for Files.Read.');
+        if (!response.ok) throw new Error(`OneDrive request failed (HTTP ${response.status}). Try again. No partial results are shown.`);
+        return response.json();
+      }
+    };
+  }
+  if (typeof window !== 'undefined' && window.opener && /^https?:$/.test(location.protocol)) {
+    const params = new URLSearchParams(location.search);
+    if (params.has('state') && (params.has('code') || params.has('error'))) {
+      const message = { type: 'treesizer-oauth', state: params.get('state'), code: params.get('code'), error: params.get('error') };
+      history.replaceState(null, '', location.pathname);
+      window.opener.postMessage(message, location.origin);
+      window.close();
+    }
+  }
+  const api = { graphURL, scanDrive, signIn, graphRequest };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+  else root.OneDrive = api;
+})(globalThis);
+
 'use strict';
 const { folder, addFile, sortedChildren, formatSize } = TreeSizer;
 const $ = id => document.getElementById(id);
 let tree = null, current = null, key = 'size', direction = -1;
+let oneDriveToken = null, cloudController = null;
+function busy(value) {
+  $('choose').disabled = value;
+  $('connect').disabled = value;
+  $('disconnect').disabled = value;
+}
 const dateFormat = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' });
 function element(tag, text, className) {
   const node = document.createElement(tag);
@@ -124,7 +261,7 @@ $('choose').addEventListener('click', () => { $('picker').value = ''; $('picker'
 $('picker').addEventListener('change', async event => {
   const files = event.target.files;
   if (!files.length) return;
-  $('choose').disabled = true;
+  busy(true);
   $('results').hidden = true;
   try {
     const rootName = files[0].webkitRelativePath.split('/')[0] || 'Selected folder';
@@ -145,7 +282,45 @@ $('picker').addEventListener('change', async event => {
   } catch (error) {
     $('status').textContent = 'The scan could not finish. Try choosing a smaller folder.';
     console.error(error);
-  } finally { $('choose').disabled = false; }
+  } finally { busy(false); }
+});
+$('connect').addEventListener('click', async () => {
+  busy(true);
+  $('results').hidden = true;
+  $('status').textContent = oneDriveToken ? 'Starting OneDrive scan…' : 'Complete Microsoft sign-in in the popup window…';
+  try {
+    if (!oneDriveToken) oneDriveToken = await OneDrive.signIn($('clientId').value.trim());
+    $('disconnect').hidden = false;
+    $('clientId').disabled = true;
+    $('connect').textContent = 'Rescan OneDrive';
+    cloudController = new AbortController();
+    $('cancelScan').hidden = false;
+    const result = await OneDrive.scanDrive(OneDrive.graphRequest(oneDriveToken), (files, scanned, found) => {
+      $('status').textContent = `Scanning OneDrive · ${files.toLocaleString()} files · ${scanned.toLocaleString()} of ${found.toLocaleString()} discovered folders…`;
+    }, cloudController.signal);
+    tree = result.tree; current = tree;
+    render();
+    $('results').hidden = false;
+    $('status').textContent = `OneDrive scan complete · ${tree.count.toLocaleString()} files.${result.skipped ? ` ${result.skipped.toLocaleString()} shared shortcuts or unsupported items excluded.` : ''} Select Rescan OneDrive to refresh.`;
+  } catch (error) {
+    $('status').textContent = error.name === 'AbortError' ? 'OneDrive scan cancelled. No partial results are shown.' : error.message;
+  } finally {
+    cloudController = null;
+    $('cancelScan').hidden = true;
+    busy(false);
+  }
+});
+$('cancelScan').addEventListener('click', () => cloudController?.abort());
+$('disconnect').addEventListener('click', () => {
+  oneDriveToken = null;
+  $('disconnect').hidden = true;
+  $('clientId').disabled = false;
+  $('connect').textContent = 'Sign in & scan OneDrive';
+  tree = null; current = null;
+  $('rows').replaceChildren();
+  $('breadcrumbs').replaceChildren();
+  $('results').hidden = true;
+  $('status').textContent = 'Disconnected from TreeSizer. Your Microsoft account may remain signed in in this browser.';
 });
 $('foldersOnly').addEventListener('change', () => { if (current) render(); });
 document.querySelectorAll('th button').forEach(button => button.addEventListener('click', () => {

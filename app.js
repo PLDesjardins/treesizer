@@ -2,6 +2,12 @@
 const { folder, addFile, sortedChildren, formatSize } = TreeSizer;
 const $ = id => document.getElementById(id);
 let tree = null, current = null, key = 'size', direction = -1;
+let oneDriveToken = null, cloudController = null;
+function busy(value) {
+  $('choose').disabled = value;
+  $('connect').disabled = value;
+  $('disconnect').disabled = value;
+}
 const dateFormat = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' });
 function element(tag, text, className) {
   const node = document.createElement(tag);
@@ -60,7 +66,7 @@ $('choose').addEventListener('click', () => { $('picker').value = ''; $('picker'
 $('picker').addEventListener('change', async event => {
   const files = event.target.files;
   if (!files.length) return;
-  $('choose').disabled = true;
+  busy(true);
   $('results').hidden = true;
   try {
     const rootName = files[0].webkitRelativePath.split('/')[0] || 'Selected folder';
@@ -81,7 +87,45 @@ $('picker').addEventListener('change', async event => {
   } catch (error) {
     $('status').textContent = 'The scan could not finish. Try choosing a smaller folder.';
     console.error(error);
-  } finally { $('choose').disabled = false; }
+  } finally { busy(false); }
+});
+$('connect').addEventListener('click', async () => {
+  busy(true);
+  $('results').hidden = true;
+  $('status').textContent = oneDriveToken ? 'Starting OneDrive scan…' : 'Complete Microsoft sign-in in the popup window…';
+  try {
+    if (!oneDriveToken) oneDriveToken = await OneDrive.signIn($('clientId').value.trim());
+    $('disconnect').hidden = false;
+    $('clientId').disabled = true;
+    $('connect').textContent = 'Rescan OneDrive';
+    cloudController = new AbortController();
+    $('cancelScan').hidden = false;
+    const result = await OneDrive.scanDrive(OneDrive.graphRequest(oneDriveToken), (files, scanned, found) => {
+      $('status').textContent = `Scanning OneDrive · ${files.toLocaleString()} files · ${scanned.toLocaleString()} of ${found.toLocaleString()} discovered folders…`;
+    }, cloudController.signal);
+    tree = result.tree; current = tree;
+    render();
+    $('results').hidden = false;
+    $('status').textContent = `OneDrive scan complete · ${tree.count.toLocaleString()} files.${result.skipped ? ` ${result.skipped.toLocaleString()} shared shortcuts or unsupported items excluded.` : ''} Select Rescan OneDrive to refresh.`;
+  } catch (error) {
+    $('status').textContent = error.name === 'AbortError' ? 'OneDrive scan cancelled. No partial results are shown.' : error.message;
+  } finally {
+    cloudController = null;
+    $('cancelScan').hidden = true;
+    busy(false);
+  }
+});
+$('cancelScan').addEventListener('click', () => cloudController?.abort());
+$('disconnect').addEventListener('click', () => {
+  oneDriveToken = null;
+  $('disconnect').hidden = true;
+  $('clientId').disabled = false;
+  $('connect').textContent = 'Sign in & scan OneDrive';
+  tree = null; current = null;
+  $('rows').replaceChildren();
+  $('breadcrumbs').replaceChildren();
+  $('results').hidden = true;
+  $('status').textContent = 'Disconnected from TreeSizer. Your Microsoft account may remain signed in in this browser.';
 });
 $('foldersOnly').addEventListener('change', () => { if (current) render(); });
 document.querySelectorAll('th button').forEach(button => button.addEventListener('click', () => {
