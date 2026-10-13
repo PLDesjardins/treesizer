@@ -4,9 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>TreeSizer — Find your biggest folders</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="core.js" defer></script>
-  <script src="app.js" defer></script>
+  <style id="treesizer-styles">
+:root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#21322c;background:#f6f8f5;font-synthesis:none}*{box-sizing:border-box}body{margin:0}main{max-width:1100px;padding:32px 40px;margin:auto}header,.brand,.toolbar,footer{display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{justify-content:flex-start;font-weight:750;font-size:22px}.logo{display:grid;place-items:center;background:#dceadf;width:36px;height:36px;border-radius:10px;color:#267349}.badge{font-size:10px;letter-spacing:1.5px;color:#65766b;background:#e9eee7;padding:6px 8px;border-radius:5px}.privacy{font-size:12px;color:#4e7960}.intro{padding:68px 0 36px}.eyebrow{font-size:11px;font-weight:700;letter-spacing:1.7px;color:#64806c;margin:0 0 14px}h1{font-size:clamp(36px,5.5vw,62px);letter-spacing:-2.5px;line-height:1.06;margin:0 0 22px;font-weight:650}.intro>p:not(.eyebrow){color:#627268;font-size:16px;max-width:460px;line-height:1.6}.intro .small{font-size:12px!important}button{font:inherit;cursor:pointer}button:focus-visible,input:focus-visible{outline:3px solid #8ab19a;outline-offset:4px}.primary{border:0;border-radius:9px;background:#2b684a;color:white;padding:15px 22px;margin:12px 0 0;font-weight:600;display:inline-flex;gap:38px}.primary:hover{background:#205639}.primary:disabled{opacity:.65;cursor:wait}#status{font-size:13px;color:#627268;min-height:20px}.summary{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #dce3db;background:#fff;border-radius:12px;margin:24px 0 30px;padding:26px 0}.summary>div{padding:0 26px;border-right:1px solid #e6ebe4}.summary>div:last-child{border:0}.summary .eyebrow{font-size:10px}.summary strong{font-size:28px;letter-spacing:-1px;font-weight:650}.toolbar{margin-bottom:16px;font-size:13px}.toolbar label{white-space:nowrap;color:#65766b;display:flex;gap:6px;align-items:center}input{accent-color:#2b684a}#breadcrumbs{display:flex;flex-wrap:wrap;align-items:center;gap:8px}#breadcrumbs button{background:none;border:0;color:#37704f;padding:4px;font-size:13px}#breadcrumbs button:disabled{color:#21322c;font-weight:650;cursor:default}.table-wrap{overflow:auto;background:white;border:1px solid #dce3db;border-radius:12px}table{width:100%;border-collapse:collapse;text-align:left;font-size:13px;white-space:nowrap}th{font-size:11px;font-weight:650;letter-spacing:.5px;background:#edf2eb;color:#607266;padding:16px 20px}th button{border:0;background:none;padding:0;color:inherit;font-weight:inherit}td{padding:18px 20px;border-top:1px solid #eaf0e8}th:first-child{width:42%}td:first-child{white-space:normal;overflow-wrap:anywhere;min-width:160px}td:last-child{color:#748278;font-size:12px}.entry{border:0;background:none;color:#263d2e;padding:0;text-align:left;display:flex;align-items:center;gap:12px;font-size:13px;overflow-wrap:anywhere}.entry:hover{text-decoration:underline}.icon{color:#769d70;font-size:20px;flex-shrink:0}.file-name{display:flex;gap:12px;align-items:center}.size-cell{font-variant-numeric:tabular-nums;font-weight:650}.bar{display:inline-block;width:65px;height:5px;background:#edf2eb;border-radius:4px;vertical-align:middle;margin-right:10px;overflow:hidden}.bar i{display:block;background:#82ab74;height:100%;border-radius:4px}.percentage{font-variant-numeric:tabular-nums;color:#73816f;font-size:11px}.note,#empty{font-size:12px;color:#748278;line-height:1.6;margin-top:18px}footer{border-top:1px solid #dce3db;padding-top:22px;margin-top:60px;color:#7b887c;font-size:11px}[hidden]{display:none!important}@media(max-width:650px){main{padding:24px 18px}.privacy,.badge{display:none}.intro{padding-top:46px}.summary>div{padding:0 12px}.summary strong{font-size:21px}.summary .eyebrow{letter-spacing:1px;font-size:9px}.share{display:none}td:nth-child(3){display:none}th,td{padding:14px 12px}.toolbar{align-items:flex-start}footer{align-items:flex-start;flex-direction:column;gap:8px}}
+
+</style>
 </head>
 <body>
   <main>
@@ -22,5 +23,137 @@
     </section>
     <footer>Less clutter. More clarity.<span>Read-only scanning · No account needed</span></footer>
   </main>
+  <script id="treesizer-app">
+(function (root) {
+  'use strict';
+  function folder(name, parent = null) {
+    return { name, parent, kind: 'folder', size: 0, modified: 0, count: 0, children: new Map() };
+  }
+  function addFile(tree, path, size, modified) {
+    const parts = path.split('/').filter(Boolean);
+    if (!parts.length) return;
+    let current = tree;
+    const ancestors = [tree];
+    for (const part of parts.slice(0, -1)) {
+      if (!current.children.has(part)) current.children.set(part, folder(part, current));
+      current = current.children.get(part);
+      ancestors.push(current);
+    }
+    current.children.set(parts.at(-1), { name: parts.at(-1), kind: 'file', size, modified, count: 1, parent: current });
+    for (const ancestor of ancestors) {
+      ancestor.size += size;
+      ancestor.count += 1;
+      ancestor.modified = Math.max(ancestor.modified, modified);
+    }
+  }
+  function sortedChildren(tree, key, direction, foldersOnly) {
+    return [...tree.children.values()].filter(item => !foldersOnly || item.kind === 'folder').sort((a, b) => {
+      const comparison = key === 'name' ? a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }) : a[key] - b[key];
+      return comparison * direction || a.name.localeCompare(b.name);
+    });
+  }
+  function formatSize(bytes) {
+    if (bytes === 0) return '0 B';
+    const unit = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), 5);
+    return `${(bytes / 1024 ** unit).toLocaleString(undefined, { maximumFractionDigits: unit ? 2 : 0 })} ${['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB'][unit]}`;
+  }
+  const api = { folder, addFile, sortedChildren, formatSize };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+  else root.TreeSizer = api;
+})(globalThis);
+
+'use strict';
+const { folder, addFile, sortedChildren, formatSize } = TreeSizer;
+const $ = id => document.getElementById(id);
+let tree = null, current = null, key = 'size', direction = -1;
+const dateFormat = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+function element(tag, text, className) {
+  const node = document.createElement(tag);
+  if (text !== undefined) node.textContent = text;
+  if (className) node.className = className;
+  return node;
+}
+function render() {
+  $('total').textContent = formatSize(current.size);
+  $('count').textContent = current.count.toLocaleString();
+  $('folders').textContent = [...current.children.values()].filter(c => c.kind === 'folder').length.toLocaleString();
+  const ancestors = [];
+  for (let node = current; node; node = node.parent) ancestors.unshift(node);
+  $('breadcrumbs').replaceChildren();
+  ancestors.forEach((node, index) => {
+    if (index) $('breadcrumbs').append(element('span', ' / '));
+    const button = element('button', node.name);
+    button.disabled = node === current;
+    button.addEventListener('click', () => { current = node; render(); });
+    $('breadcrumbs').append(button);
+  });
+  document.querySelectorAll('th button').forEach(button => {
+    const active = button.dataset.key === key;
+    button.querySelector('span').textContent = active ? (direction === -1 ? '↓' : '↑') : '↕';
+    if (active) button.closest('th').setAttribute('aria-sort', direction === -1 ? 'descending' : 'ascending');
+    else button.closest('th').removeAttribute('aria-sort');
+  });
+  const children = sortedChildren(current, key, direction, $('foldersOnly').checked);
+  const fragment = document.createDocumentFragment();
+  children.forEach(item => {
+    const row = element('tr');
+    const name = element('td');
+    const entry = element(item.kind === 'folder' ? 'button' : 'span', undefined, item.kind === 'folder' ? 'entry' : 'file-name');
+    const icon = element('span', item.kind === 'folder' ? '▰' : '▧', 'icon');
+    icon.setAttribute('aria-hidden', 'true');
+    entry.append(icon, element('span', item.name));
+    if (item.kind === 'folder') entry.addEventListener('click', () => { current = item; render(); });
+    name.append(entry);
+    const size = element('td', formatSize(item.size), 'size-cell');
+    size.title = `${item.size.toLocaleString()} bytes · ${item.count.toLocaleString()} file(s)`;
+    const share = element('td');
+    const percentage = current.size ? item.size / current.size * 100 : 0;
+    const bar = element('span', undefined, 'bar');
+    const fill = element('i');
+    fill.style.width = `${percentage}%`;
+    bar.append(fill);
+    share.append(bar, element('span', `${percentage.toFixed(1)}%`, 'percentage'));
+    row.append(name, size, share, element('td', item.modified ? dateFormat.format(item.modified) : '—'));
+    fragment.append(row);
+  });
+  $('rows').replaceChildren(fragment);
+  $('empty').hidden = children.length > 0;
+  $('empty').textContent = $('foldersOnly').checked ? 'No subfolders here. Uncheck “Folders only” to see individual files.' : 'No files or folders here.';
+}
+$('choose').addEventListener('click', () => { $('picker').value = ''; $('picker').click(); });
+$('picker').addEventListener('change', async event => {
+  const files = event.target.files;
+  if (!files.length) return;
+  $('choose').disabled = true;
+  $('results').hidden = true;
+  try {
+    const rootName = files[0].webkitRelativePath.split('/')[0] || 'Selected folder';
+    const next = folder(rootName);
+    for (let index = 0; index < files.length; index++) {
+      const file = files[index];
+      const path = file.webkitRelativePath ? file.webkitRelativePath.split('/').slice(1).join('/') : file.name;
+      addFile(next, path, file.size, file.lastModified);
+      if (index % 500 === 0) {
+        $('status').textContent = `Scanning ${index.toLocaleString()} of ${files.length.toLocaleString()} files…`;
+        await new Promise(resolve => setTimeout(resolve, 0));
+      }
+    }
+    tree = next; current = tree;
+    render();
+    $('results').hidden = false;
+    $('status').textContent = `Scan complete · ${files.length.toLocaleString()} files in ${rootName}. Choose another folder to rescan.`;
+  } catch (error) {
+    $('status').textContent = 'The scan could not finish. Try choosing a smaller folder.';
+    console.error(error);
+  } finally { $('choose').disabled = false; }
+});
+$('foldersOnly').addEventListener('change', () => { if (current) render(); });
+document.querySelectorAll('th button').forEach(button => button.addEventListener('click', () => {
+  if (key === button.dataset.key) direction *= -1;
+  else { key = button.dataset.key; direction = key === 'name' ? 1 : -1; }
+  if (current) render();
+}));
+
+</script>
 </body>
 </html>
