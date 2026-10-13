@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TreeSizer — Find your biggest folders</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="core.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main>
+    <header><div class="brand"><span class="logo" aria-hidden="true">▤</span> TreeSizer <span class="badge">LOCAL TOOL</span></div><span class="privacy">● Private by design</span></header>
+    <section class="intro"><p class="eyebrow">MAKE ROOM FOR WHAT MATTERS</p><h1>Find where your<br>space goes.</h1><p>Explore your folders, spot the heavy ones, and get a clear picture of your storage.</p><button id="choose" class="primary">Choose a folder <span aria-hidden="true">↗</span></button><input id="picker" type="file" webkitdirectory multiple hidden><p class="small">Files stay on your device. Nothing is uploaded.</p></section>
+    <p id="status" role="status" aria-live="polite">Select a folder to get started.</p>
+    <section id="results" hidden>
+      <div class="summary"><div><p class="eyebrow">TOTAL FILE SIZE</p><strong id="total"></strong></div><div><p class="eyebrow">FILES SCANNED</p><strong id="count"></strong></div><div><p class="eyebrow">FOLDERS</p><strong id="folders"></strong></div></div>
+      <div class="toolbar"><nav id="breadcrumbs" aria-label="Folder navigation"></nav><label><input id="foldersOnly" type="checkbox" checked> Folders only</label></div>
+      <div class="table-wrap"><table><thead><tr><th><button data-key="name">Name <span></span></button></th><th><button data-key="size">Size <span></span></button></th><th class="share">% of folder</th><th><button data-key="modified">Last modified <span></span></button></th></tr></thead><tbody id="rows"></tbody></table></div>
+      <p id="empty" hidden>No subfolders here. Uncheck “Folders only” to see individual files.</p>
+      <p class="note">Folder sizes include all nested files. “Last modified” is the newest file date inside a folder. Sizes are logical file bytes, not disk usage; hidden or inaccessible files may be omitted by your browser.</p>
+    </section>
+    <footer>Less clutter. More clarity.<span>Read-only scanning · No account needed</span></footer>
+  </main>
+</body>
+</html>
